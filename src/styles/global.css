@@ -1,11 +1,155 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: #0d0e10;
+  --color-foreground: #ebe7df;
+  --color-muted: #8a8b8f;
+  --color-accent: #d97736;
+
+  --font-display: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --spacing-viewport-mobile: 1.25rem;
+  --spacing-viewport-desktop: 4vw;
+}
+
+:root {
+  /* Core Color Tokens: Obsidian Slate, Alabaster Warmth, Muted Silver Ash, Tungsten Safelight */
+  --color-background: #0d0e10;
+  --color-foreground: #ebe7df;
+  --color-muted: #8a8b8f;
+  --color-accent: #d97736;
+
+  /* Typography Families */
+  --font-display: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Viewport Safe Margins */
+  --spacing-viewport-mobile: 1.25rem;
+  --spacing-viewport-desktop: 4vw;
+  --spacing-viewport-x: clamp(1.25rem, 4vw, 4rem);
+  --spacing-content: clamp(2rem, 5vw, 6rem);
+}
+
+/* CSS Reset & Semantic Defaults */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-html, body {
+html {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+body {
   margin: 0;
   padding: 0;
-  min-height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  overflow-x: hidden;
 }
+
+/* Photography Baseline: Intrinsic Aspect Ratio Protection */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Links & Buttons Baseline */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}
+
+/* Typography Foundation Classes */
+.text-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.text-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.text-metadata {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.5vw, 0.8125rem);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* Viewport Margin Utility */
+.viewport-padding {
+  padding-left: max(var(--spacing-viewport-mobile), env(safe-area-inset-left));
+  padding-right: max(var(--spacing-viewport-mobile), env(safe-area-inset-right));
+}
+
+@media (min-width: 768px) {
+  .viewport-padding {
+    padding-left: max(var(--spacing-viewport-desktop), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-viewport-desktop), env(safe-area-inset-right));
+  }
+}
+
+/* Text Selection Accent */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+/* Accessibility Focus Indicator */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Reduced Motion Baseline */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

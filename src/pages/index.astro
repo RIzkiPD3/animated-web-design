@@ -3,7 +3,40 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout>
-  <main>
-    <p>Application shell</p>
+  <main class="viewport-padding py-16 md:py-24 max-w-4xl">
+    <header class="space-y-6">
+      <div class="text-metadata text-muted">
+        ARCHIVE REFERENCE: ATELIER OBSCURA
+      </div>
+      <h1 class="text-display">
+        Spatial Photography Archive
+      </h1>
+      <p class="text-heading text-muted">
+        Visual foundation and architectural darkroom baseline.
+      </p>
+      <p class="text-body max-w-2xl text-muted">
+        This foundation establishes the core typography scale, obsidian slate canvas,
+        alabaster contrast values, and responsive viewport margins.
+      </p>
+      <div class="pt-4 flex items-center gap-4">
+        <a
+          href="#foundation-notes"
+          class="text-metadata px-4 py-2 border border-muted/40 rounded-sm hover:border-muted text-foreground transition-colors"
+        >
+          INSPECT FOUNDATION
+        </a>
+      </div>
+    </header>
+
+    <section id="foundation-notes" class="mt-16 pt-8 border-t border-muted/20 space-y-4">
+      <h2 class="text-heading">Curatorial Palette and Hierarchy</h2>
+      <p class="text-body text-muted">
+        Dark mineral obsidian canvas with tungsten safelight reserved strictly for focused interaction telemetry.
+      </p>
+      <div class="text-metadata text-muted">
+        50mm f/1.4 1/250s ISO 100
+      </div>
+    </section>
   </main>
 </BaseLayout>
+
