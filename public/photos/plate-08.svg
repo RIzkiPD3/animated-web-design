@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1800" width="1440" height="1800">
+  <defs>
+    <linearGradient id="bg-08" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111316" />
+      <stop offset="45%" stop-color="#0c0d10" />
+      <stop offset="100%" stop-color="#060708" />
+    </linearGradient>
+    <linearGradient id="vault" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a221a" stop-opacity="0.6" />
+      <stop offset="50%" stop-color="#1a1c22" />
+      <stop offset="100%" stop-color="#0e1014" />
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="1800" fill="url(#bg-08)" />
+  <!-- Water Reservoir Plane -->
+  <rect x="60" y="1120" width="1320" height="600" fill="#07080a" opacity="0.9" />
+  <line x1="60" y1="1120" x2="1380" y2="1120" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Subterranean Vault Arches -->
+  <path d="M160,1120 L160,540 C160,320 520,320 520,540 L520,1120 Z" fill="url(#vault)" stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="1" />
+  <path d="M520,1120 L520,540 C520,320 920,320 920,540 L920,1120 Z" fill="url(#vault)" stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="1" />
+  <path d="M920,1120 L920,540 C920,320 1280,320 1280,540 L1280,1120 Z" fill="url(#vault)" stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="1" />
+  <!-- Inverted Reflections in Water -->
+  <path d="M160,1120 L160,1500 C160,1660 520,1660 520,1500 L520,1120 Z" fill="#0e1014" opacity="0.5" stroke="#8a8b8f" stroke-opacity="0.1" stroke-width="1" />
+  <path d="M520,1120 L520,1500 C520,1660 920,1660 920,1500 L920,1120 Z" fill="#0e1014" opacity="0.5" stroke="#8a8b8f" stroke-opacity="0.1" stroke-width="1" />
+  <circle cx="720" cy="540" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="13" fill="#8a8b8f" letter-spacing="2">
+    <text x="80" y="100">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="80" y="130">PL-08 | 4:5 | 120 HP5 PLUS</text>
+    <text x="1360" y="100" text-anchor="end">ISTANBUL / 2024</text>
+    <text x="1360" y="130" text-anchor="end">50MM F/4.0 1/15S ISO 400</text>
+    <text x="80" y="1720">SUBTERRANEAN VAULTS</text>
+    <text x="1360" y="1720" text-anchor="end">SERIES: NOCTURNE STUDIES</text>
+  </g>
+  <rect x="50" y="50" width="1340" height="1700" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1200" width="1800" height="1200">
+  <defs>
+    <linearGradient id="bg-01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14161a" />
+      <stop offset="50%" stop-color="#0d0e10" />
+      <stop offset="100%" stop-color="#08090a" />
+    </linearGradient>
+    <linearGradient id="cantilever" x1="0%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#2c2e35" />
+      <stop offset="60%" stop-color="#1c1e22" />
+      <stop offset="100%" stop-color="#0f1012" />
+    </linearGradient>
+  </defs>
+  <rect width="1800" height="1200" fill="url(#bg-01)" />
+  <!-- Horizon line & reflecting pool -->
+  <line x1="80" y1="840" x2="1720" y2="840" stroke="#8a8b8f" stroke-opacity="0.2" stroke-width="1" />
+  <rect x="80" y="840" width="1640" height="280" fill="#090a0c" opacity="0.85" />
+  <!-- Monolithic Cantilever Geometry -->
+  <polygon points="180,340 1280,480 1140,840 260,840" fill="url(#cantilever)" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <polygon points="260,840 1140,840 980,1020 180,940" fill="#121316" opacity="0.6" />
+  <circle cx="1280" cy="480" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="14" fill="#8a8b8f" letter-spacing="2">
+    <text x="90" y="110">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="90" y="140">PL-01 | 3:2 | 35MM OPTICAL MONOCHROME</text>
+    <text x="1710" y="110" text-anchor="end">VALENCIA / 2024</text>
+    <text x="1710" y="140" text-anchor="end">LEICA M11-P / 35MM F/4.0 1/250S ISO 100</text>
+    <text x="90" y="1140">CANTILEVER AT DUSK</text>
+    <text x="1710" y="1140" text-anchor="end">SERIES: ARCHITECTURAL MONOLITHS</text>
+  </g>
+  <rect x="60" y="60" width="1680" height="1080" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

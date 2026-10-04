@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1800" width="1200" height="1800">
+  <defs>
+    <linearGradient id="bg-02" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#121316" />
+      <stop offset="50%" stop-color="#0d0e10" />
+      <stop offset="100%" stop-color="#090a0c" />
+    </linearGradient>
+    <linearGradient id="shadow-02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#08090a" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#121316" stop-opacity="0.4" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1800" fill="url(#bg-02)" />
+  <!-- Colonnade Pillars -->
+  <g fill="#1f2127" stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="1">
+    <rect x="180" y="240" width="140" height="1320" />
+    <rect x="380" y="240" width="140" height="1320" />
+    <rect x="580" y="240" width="140" height="1320" />
+    <rect x="780" y="240" width="140" height="1320" />
+    <rect x="980" y="240" width="120" height="1320" />
+  </g>
+  <!-- Diagonal Shadow Rays -->
+  <polygon points="120,400 940,1560 700,1560 120,680" fill="url(#shadow-02)" />
+  <polygon points="320,240 1140,1320 900,1320 320,520" fill="url(#shadow-02)" />
+  <circle cx="580" cy="240" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="13" fill="#8a8b8f" letter-spacing="2">
+    <text x="80" y="100">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="80" y="130">PL-02 | 2:3 | 35MM SILVER GELATIN</text>
+    <text x="1120" y="100" text-anchor="end">KYOTO / 2024</text>
+    <text x="1120" y="130" text-anchor="end">50MM F/2.8 1/125S ISO 200</text>
+    <text x="80" y="1720">COLONNADE IN STASIS</text>
+    <text x="1120" y="1720" text-anchor="end">SERIES: ARCHITECTURAL MONOLITHS</text>
+  </g>
+  <rect x="50" y="50" width="1100" height="1700" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

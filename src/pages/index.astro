@@ -1,5 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getPhotographs, formatTelemetry } from '../data/photos';
+
+const contentEntries = await getCollection('photos');
+const localPhotos = getPhotographs();
 ---
 
 <BaseLayout>
@@ -12,29 +17,44 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Spatial Photography Archive
       </h1>
       <p class="text-heading text-muted">
-        Visual foundation and architectural darkroom baseline.
+        Archive Data &amp; Photography Model foundation.
       </p>
       <p class="text-body max-w-2xl text-muted">
-        This foundation establishes the core typography scale, obsidian slate canvas,
-        alabaster contrast values, and responsive viewport margins.
+        Centralized curatorial data collection validating photographic aspect ratios,
+        optical EXIF telemetry, and editorial metadata for Exhibition Runway and Deep Monograph.
       </p>
       <div class="pt-4 flex items-center gap-4">
         <a
-          href="#foundation-notes"
+          href="#archive-manifest"
           class="text-metadata px-4 py-2 border border-muted/40 rounded-sm hover:border-muted text-foreground transition-colors"
         >
-          INSPECT FOUNDATION
+          VERIFY ARCHIVE MANIFEST ({contentEntries.length} PLATES)
         </a>
       </div>
     </header>
 
-    <section id="foundation-notes" class="mt-16 pt-8 border-t border-muted/20 space-y-4">
-      <h2 class="text-heading">Curatorial Palette and Hierarchy</h2>
-      <p class="text-body text-muted">
-        Dark mineral obsidian canvas with tungsten safelight reserved strictly for focused interaction telemetry.
-      </p>
-      <div class="text-metadata text-muted">
-        50mm f/1.4 1/250s ISO 100
+    <section id="archive-manifest" class="mt-16 pt-8 border-t border-muted/20 space-y-6">
+      <div class="space-y-2">
+        <h2 class="text-heading">Curatorial Archive Manifest</h2>
+        <p class="text-body text-muted">
+          All eight archival plates verified via Astro Content Collections and typed data module.
+        </p>
+      </div>
+
+      <div class="border border-muted/20 rounded-sm divide-y divide-muted/20 overflow-x-auto">
+        {localPhotos.map((photo) => (
+          <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 text-metadata">
+            <div class="space-y-1">
+              <span class="text-accent font-mono">{photo.metadata.plateNumber}</span>
+              <span class="text-foreground ml-2 font-serif text-base">{photo.title}</span>
+              <span class="text-muted block md:inline md:ml-2">({photo.metadata.series})</span>
+            </div>
+            <div class="flex items-center gap-4 text-muted">
+              <span>{photo.image.aspectRatio} ({photo.image.width}x{photo.image.height})</span>
+              <span>{formatTelemetry(photo.metadata)}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   </main>
