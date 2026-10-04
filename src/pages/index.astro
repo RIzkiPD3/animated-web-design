@@ -1,62 +1,141 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import { getPhotographs, formatTelemetry } from '../data/photos';
+import { getPhotographs } from '../data/photos';
+import ExhibitionPlate from '../components/ExhibitionPlate.astro';
 
-const contentEntries = await getCollection('photos');
-const localPhotos = getPhotographs();
+const photos = getPhotographs();
+
+// Map curated asymmetric rhythm variants to each plate sequence
+const layoutVariants: Array<'left' | 'right' | 'left-center' | 'wide' | 'center'> = [
+  'left',        // Plate 01: 3:2 Horizontal
+  'right',       // Plate 02: 2:3 Vertical
+  'left-center', // Plate 03: 4:5 Vertical
+  'right',       // Plate 04: 1:1 Square
+  'wide',        // Plate 05: 16:9 Panoramic
+  'right',       // Plate 06: 3:2 Horizontal
+  'left',        // Plate 07: 2:3 Vertical
+  'center',      // Plate 08: 4:5 Vertical
+];
 ---
 
-<BaseLayout>
-  <main class="viewport-padding py-16 md:py-24 max-w-4xl">
-    <header class="space-y-6">
-      <div class="text-metadata text-muted">
-        ARCHIVE REFERENCE: ATELIER OBSCURA
+<BaseLayout title="Atelier Obscura · Exhibition Runway">
+  <main class="viewport-padding relative min-h-screen">
+    <!-- Exhibition Introduction Header -->
+    <header id="introduction" class="pt-20 md:pt-32 pb-16 md:pb-28 max-w-4xl space-y-8 scroll-mt-12">
+      <!-- Archive Identity -->
+      <div class="text-metadata text-muted font-mono tracking-widest uppercase">
+        Atelier Obscura / Kroma Archive
       </div>
-      <h1 class="text-display">
-        Spatial Photography Archive
+
+      <!-- Monograph Title -->
+      <h1 class="text-display text-foreground font-serif tracking-tight">
+        Spatial Photography Monograph
       </h1>
-      <p class="text-heading text-muted">
-        Archive Data &amp; Photography Model foundation.
+
+      <!-- Curatorial Statement -->
+      <p class="text-heading text-muted/90 font-serif leading-snug max-w-3xl">
+        An investigation into monolithic architecture, raw volcanic geology, and mechanical optical stasis.
       </p>
-      <p class="text-body max-w-2xl text-muted">
-        Centralized curatorial data collection validating photographic aspect ratios,
-        optical EXIF telemetry, and editorial metadata for Exhibition Runway and Deep Monograph.
+
+      <p class="text-body text-muted leading-relaxed max-w-2xl">
+        Each photograph is presented as an individual archival plate. Formats and proportions are preserved in their authentic film aspect ratios without uniform cropping or digital distortion.
       </p>
-      <div class="pt-4 flex items-center gap-4">
-        <a
-          href="#archive-manifest"
-          class="text-metadata px-4 py-2 border border-muted/40 rounded-sm hover:border-muted text-foreground transition-colors"
-        >
-          VERIFY ARCHIVE MANIFEST ({contentEntries.length} PLATES)
-        </a>
+
+      <!-- Exhibition Ledger & Navigation Trigger -->
+      <div class="pt-6 border-t border-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-metadata text-muted font-mono">
+        <div class="space-y-1">
+          <span class="text-foreground block sm:inline">INVENTORY: {photos.length} ARCHIVAL PLATES</span>
+          <span class="hidden sm:inline"> · </span>
+          <span>RATIOS: 3:2, 2:3, 4:5, 1:1, 16:9</span>
+        </div>
+        <div>
+          <a
+            href={`#${photos[0]?.slug}`}
+            class="text-accent tracking-wider uppercase hover:underline inline-flex items-center gap-1.5 focus-visible:outline-none"
+          >
+            Enter Runway ↓
+          </a>
+        </div>
       </div>
     </header>
 
-    <section id="archive-manifest" class="mt-16 pt-8 border-t border-muted/20 space-y-6">
-      <div class="space-y-2">
-        <h2 class="text-heading">Curatorial Archive Manifest</h2>
-        <p class="text-body text-muted">
-          All eight archival plates verified via Astro Content Collections and typed data module.
-        </p>
+    <!-- The Exhibition Runway -->
+    <div class="exhibition-runway relative">
+      {photos.map((photo, index) => (
+        <ExhibitionPlate
+          photo={photo}
+          layoutVariant={layoutVariants[index] || 'center'}
+          isFirst={index === 0}
+        />
+      ))}
+    </div>
+
+    <!-- Curatorial Epilogue / Colophon -->
+    <footer class="py-24 md:py-36 border-t border-muted/20 text-center max-w-3xl mx-auto space-y-6">
+      <div class="text-metadata text-muted font-mono tracking-widest uppercase">
+        End of Runway · Atelier Obscura Archive
       </div>
 
-      <div class="border border-muted/20 rounded-sm divide-y divide-muted/20 overflow-x-auto">
-        {localPhotos.map((photo) => (
-          <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 text-metadata">
-            <div class="space-y-1">
-              <span class="text-accent font-mono">{photo.metadata.plateNumber}</span>
-              <span class="text-foreground ml-2 font-serif text-base">{photo.title}</span>
-              <span class="text-muted block md:inline md:ml-2">({photo.metadata.series})</span>
-            </div>
-            <div class="flex items-center gap-4 text-muted">
-              <span>{photo.image.aspectRatio} ({photo.image.width}x{photo.image.height})</span>
-              <span>{formatTelemetry(photo.metadata)}</span>
-            </div>
-          </div>
-        ))}
+      <h2 class="text-heading text-foreground font-serif">
+        Curatorial Integrity Preserved
+      </h2>
+
+      <p class="text-body text-muted leading-relaxed max-w-xl mx-auto">
+        All eight plates rendered in intrinsic aspect ratios on an obsidian slate canvas with tungsten telemetry reference.
+      </p>
+
+      <div class="pt-4">
+        <a
+          href="#introduction"
+          class="text-metadata text-accent tracking-wider uppercase inline-flex items-center gap-2 hover:underline focus-visible:outline-none"
+        >
+          Return to Exhibition Top ↑
+        </a>
       </div>
-    </section>
+    </footer>
   </main>
 </BaseLayout>
 
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Check user preference for reduced motion
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const moments = document.querySelectorAll<HTMLElement>('.exhibition-moment');
+
+    moments.forEach((moment) => {
+      const photo = moment.querySelector('.plate-photo');
+      const caption = moment.querySelector('.plate-caption');
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: moment,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      });
+
+      if (photo) {
+        tl.fromTo(
+          photo,
+          { opacity: 0.2, y: 20 },
+          { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }
+        );
+      }
+
+      if (caption) {
+        tl.fromTo(
+          caption,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
+          '-=0.6'
+        );
+      }
+    });
+  }
+</script>

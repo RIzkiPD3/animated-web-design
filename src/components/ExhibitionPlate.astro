@@ -1,0 +1,83 @@
+---
+import type { Photograph } from '../types/photography';
+import { formatTelemetry } from '../data/photos';
+
+interface Props {
+  photo: Photograph;
+  layoutVariant?: 'left' | 'right' | 'left-center' | 'wide' | 'center';
+  isFirst?: boolean;
+}
+
+const {
+  photo,
+  layoutVariant = 'center',
+  isFirst = false,
+} = Astro.props;
+
+// Determine alignment classes based on editorial rhythm variant
+const alignmentClasses = {
+  left: 'mr-auto ml-0 md:w-9/12 lg:w-8/12',
+  right: 'ml-auto mr-0 md:w-7/12 lg:w-6/12 md:mr-6 lg:mr-12',
+  'left-center': 'mr-auto ml-0 md:ml-12 lg:ml-20 md:w-8/12 lg:w-7/12',
+  wide: 'mx-auto w-full max-w-6xl',
+  center: 'mx-auto md:w-8/12 lg:w-7/12',
+}[layoutVariant];
+---
+
+<section
+  class="exhibition-moment my-24 md:my-36 lg:my-48 first:mt-12 last:mb-32 scroll-mt-24"
+  id={photo.slug}
+  data-plate={photo.metadata.plateNumber}
+>
+  <div class={`w-full ${alignmentClasses} space-y-6`}>
+    <!-- Photographic Plate Frame -->
+    <figure class="plate-figure m-0 space-y-4">
+      <div
+        class="relative overflow-hidden bg-[#07080a] border border-muted/15"
+        style={`aspect-ratio: ${photo.image.width} / ${photo.image.height};`}
+      >
+        <img
+          src={photo.image.src}
+          alt={photo.image.alt}
+          width={photo.image.width}
+          height={photo.image.height}
+          loading={isFirst ? 'eager' : 'lazy'}
+          decoding="async"
+          class="plate-photo w-full h-full object-contain block"
+        />
+      </div>
+
+      <!-- Plate Identity & Editorial Description -->
+      <figcaption class="plate-caption space-y-3 pt-2">
+        <!-- Archival Catalogue ID -->
+        <div class="flex items-center justify-between text-metadata text-muted font-mono tracking-wider">
+          <span class="text-accent font-semibold">{photo.metadata.plateNumber}</span>
+          <span>{photo.image.aspectRatio} · {photo.metadata.series}</span>
+        </div>
+
+        <!-- Photograph Title -->
+        <h2 class="text-heading text-foreground font-serif tracking-tight">
+          {photo.title}
+        </h2>
+
+        <!-- Curatorial Caption & Context -->
+        <p class="text-body text-muted leading-relaxed max-w-2xl">
+          {photo.editorial.caption}
+        </p>
+
+        <p class="text-body text-muted/80 text-sm leading-relaxed max-w-2xl">
+          {photo.editorial.description}
+        </p>
+
+        <!-- Technical Optical Telemetry -->
+        <div class="plate-telemetry border-t border-muted/15 pt-3 mt-4 text-metadata text-muted/70 flex flex-wrap gap-x-4 gap-y-1.5 font-mono">
+          <span class="text-foreground/90">{photo.metadata.camera}</span>
+          <span>{photo.metadata.lens}</span>
+          <span class="text-accent/90">{formatTelemetry(photo.metadata)}</span>
+          <span>{photo.metadata.medium}</span>
+          <span class="ml-auto text-muted/60">{photo.metadata.location} · {photo.metadata.year}</span>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</section>
