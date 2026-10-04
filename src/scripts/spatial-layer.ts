@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { photographs } from '../data/photos';
+import type { PlateInteractionDetail } from './photography-interaction';
 
 interface SpatialPlane {
   id: string;
@@ -7,6 +8,14 @@ interface SpatialPlane {
   mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>;
   material: THREE.MeshBasicMaterial;
   baseDepth: number;
+  currentDepth: number;
+  targetDepth: number;
+  currentScaleMult: number;
+  targetScaleMult: number;
+  localPointerX: number;
+  localPointerY: number;
+  isHovered: boolean;
+  isActive: boolean;
   currentY: number;
   targetY: number;
   currentX: number;
@@ -72,7 +81,6 @@ export function initSpatialLayer(): (() => void) | undefined {
   const frameElements = document.querySelectorAll<HTMLElement>('.plate-photo-frame[data-plate-id]');
 
   let texturesLoadedCount = 0;
-  const totalPlanes = frameElements.length;
 
   frameElements.forEach((frame) => {
     const plateId = frame.dataset.plateId;
@@ -128,6 +136,14 @@ export function initSpatialLayer(): (() => void) | undefined {
       mesh,
       material,
       baseDepth,
+      currentDepth: baseDepth,
+      targetDepth: baseDepth,
+      currentScaleMult: 1.0,
+      targetScaleMult: 1.0,
+      localPointerX: 0,
+      localPointerY: 0,
+      isHovered: false,
+      isActive: false,
       currentY: 0,
       targetY: 0,
       currentX: 0,
@@ -146,6 +162,80 @@ export function initSpatialLayer(): (() => void) | undefined {
   if (!isMobile && !prefersReducedMotion) {
     window.addEventListener('mousemove', onPointerMove, { passive: true });
   }
+
+  // Photography Interaction Event Handlers (Synchronized with DOM)
+  const onPlateHover = (e: Event) => {
+    const customEvent = e as CustomEvent<PlateInteractionDetail>;
+    const plate = spatialPlanes.find((p) => p.id === customEvent.detail.plateId);
+    if (!plate) return;
+
+    plate.isHovered = true;
+    if (!plate.isActive && !isMobile && !prefersReducedMotion) {
+      plate.targetDepth = plate.baseDepth + 14;
+      plate.targetScaleMult = 1.018;
+    }
+  };
+
+  const onPlateMove = (e: Event) => {
+    const customEvent = e as CustomEvent<PlateInteractionDetail>;
+    const plate = spatialPlanes.find((p) => p.id === customEvent.detail.plateId);
+    if (!plate) return;
+
+    plate.localPointerX = customEvent.detail.localX ?? 0;
+    plate.localPointerY = customEvent.detail.localY ?? 0;
+  };
+
+  const onPlateLeave = (e: Event) => {
+    const customEvent = e as CustomEvent<PlateInteractionDetail>;
+    const plate = spatialPlanes.find((p) => p.id === customEvent.detail.plateId);
+    if (!plate) return;
+
+    plate.isHovered = false;
+    plate.localPointerX = 0;
+    plate.localPointerY = 0;
+
+    if (!plate.isActive) {
+      plate.targetDepth = plate.baseDepth;
+      plate.targetScaleMult = 1.0;
+    }
+  };
+
+  const onPlateActivate = (e: Event) => {
+    const customEvent = e as CustomEvent<PlateInteractionDetail>;
+    const activeId = customEvent.detail.plateId;
+
+    spatialPlanes.forEach((plate) => {
+      if (plate.id === activeId) {
+        plate.isActive = true;
+        if (!prefersReducedMotion) {
+          plate.targetDepth = plate.baseDepth + 24;
+          plate.targetScaleMult = 1.025;
+        }
+      } else {
+        plate.isActive = false;
+        if (!plate.isHovered) {
+          plate.targetDepth = plate.baseDepth;
+          plate.targetScaleMult = 1.0;
+        }
+      }
+    });
+  };
+
+  const onPlateDeactivate = () => {
+    spatialPlanes.forEach((plate) => {
+      plate.isActive = false;
+      if (!plate.isHovered) {
+        plate.targetDepth = plate.baseDepth;
+        plate.targetScaleMult = 1.0;
+      }
+    });
+  };
+
+  window.addEventListener('plate:hover', onPlateHover);
+  window.addEventListener('plate:move', onPlateMove);
+  window.addEventListener('plate:leave', onPlateLeave);
+  window.addEventListener('plate:activate', onPlateActivate);
+  window.addEventListener('plate:deactivate', onPlateDeactivate);
 
   // Viewport calculation helpers
   function calculateVisibleDimensions(distance: number) {
@@ -194,7 +284,16 @@ export function initSpatialLayer(): (() => void) | undefined {
       }
       plane.mesh.visible = true;
 
-      const distance = cameraZ - plane.baseDepth;
+      // Depth damping
+      const depthLerp = prefersReducedMotion ? 1 : 0.12;
+      plane.currentDepth += (plane.targetDepth - plane.currentDepth) * depthLerp;
+      plane.mesh.position.z = plane.currentDepth;
+
+      // Scale damping
+      const scaleLerp = prefersReducedMotion ? 1 : 0.12;
+      plane.currentScaleMult += (plane.targetScaleMult - plane.currentScaleMult) * scaleLerp;
+
+      const distance = cameraZ - plane.currentDepth;
       const { width: visWidth, height: visHeight } = calculateVisibleDimensions(distance);
 
       // Map DOM screen center to Three.js world coordinates
@@ -204,9 +303,9 @@ export function initSpatialLayer(): (() => void) | undefined {
       plane.targetX = (screenCenterX - window.innerWidth / 2) * (visWidth / window.innerWidth);
       plane.targetY = -(screenCenterY - window.innerHeight / 2) * (visHeight / window.innerHeight);
 
-      // Scale unit plane to match exact DOM frame dimensions
-      const targetScaleX = rect.width * (visWidth / window.innerWidth);
-      const targetScaleY = rect.height * (visHeight / window.innerHeight);
+      // Scale unit plane to match exact DOM frame dimensions * interactive scale
+      const targetScaleX = rect.width * (visWidth / window.innerWidth) * plane.currentScaleMult;
+      const targetScaleY = rect.height * (visHeight / window.innerHeight) * plane.currentScaleMult;
 
       // Physical damping on position for weight and inertia
       const lerpPos = prefersReducedMotion ? 1 : 0.15;
@@ -217,11 +316,17 @@ export function initSpatialLayer(): (() => void) | undefined {
       plane.mesh.position.y = plane.currentY;
       plane.mesh.scale.set(targetScaleX, targetScaleY, 1);
 
-      // Very subtle inertial pitch rotation on scroll
+      // Very subtle inertial pitch rotation on scroll + local pointer optical tilt
       if (!prefersReducedMotion && !isMobile) {
-        const targetRotX = THREE.MathUtils.clamp(-scrollVelocity * 0.00025, -0.04, 0.04);
-        plane.mesh.rotation.x = THREE.MathUtils.lerp(plane.mesh.rotation.x, targetRotX, 0.1);
-        plane.mesh.rotation.y = THREE.MathUtils.lerp(plane.mesh.rotation.y, pointer.x * 0.012, 0.08);
+        const scrollTilt = THREE.MathUtils.clamp(-scrollVelocity * 0.00025, -0.04, 0.04);
+        const localTiltY = plane.isHovered ? plane.localPointerX * 0.022 : 0;
+        const localTiltX = plane.isHovered ? -plane.localPointerY * 0.018 : 0;
+
+        const targetRotY = localTiltY + pointer.x * 0.012;
+        const targetRotX = localTiltX + scrollTilt;
+
+        plane.mesh.rotation.y = THREE.MathUtils.lerp(plane.mesh.rotation.y, targetRotY, 0.08);
+        plane.mesh.rotation.x = THREE.MathUtils.lerp(plane.mesh.rotation.x, targetRotX, 0.08);
       }
     }
 
@@ -245,6 +350,11 @@ export function initSpatialLayer(): (() => void) | undefined {
     cancelAnimationFrame(animationFrameId);
     window.removeEventListener('resize', onResize);
     window.removeEventListener('mousemove', onPointerMove);
+    window.removeEventListener('plate:hover', onPlateHover);
+    window.removeEventListener('plate:move', onPlateMove);
+    window.removeEventListener('plate:leave', onPlateLeave);
+    window.removeEventListener('plate:activate', onPlateActivate);
+    window.removeEventListener('plate:deactivate', onPlateDeactivate);
     unitGeometry.dispose();
     spatialPlanes.forEach((p) => {
       p.material.dispose();

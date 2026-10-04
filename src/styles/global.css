@@ -163,4 +163,68 @@ button {
   pointer-events: none;
 }
 
+/* Photography Interaction & Viewfinder Reticles */
+.plate-photo-frame:focus-visible {
+  outline: 2px solid var(--color-accent) !important;
+  outline-offset: 4px;
+}
+
+.plate-photo-frame:hover .optical-reticle,
+.plate-photo-frame:focus-visible .optical-reticle,
+.plate-photo-frame.is-active .optical-reticle {
+  opacity: 0.85;
+}
+
+.plate-photo-frame:hover .plate-status-badge,
+.plate-photo-frame:focus-visible .plate-status-badge {
+  opacity: 0.9;
+}
+
+.plate-photo-frame.is-active .plate-status-badge {
+  opacity: 1;
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  border-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.plate-photo-frame:hover {
+  border-color: rgba(217, 119, 54, 0.4);
+}
+
+.plate-photo-frame.is-active {
+  border-color: var(--color-accent) !important;
+}
+
+/* Curatorial Focus: Ambient Runway Dimming on Active Plate */
+body.has-active-plate .exhibition-moment:not(.is-active-moment) {
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+
+body.has-active-plate .exhibition-moment.is-active-moment {
+  opacity: 1;
+}
+
+/* Non-WebGL DOM Fallback Micro-Interactions */
+html:not(.webgl-active) .plate-photo-frame {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+html:not(.webgl-active) .plate-photo-frame:hover:not(.is-active) {
+  transform: scale(1.015);
+}
+
+html:not(.webgl-active) .plate-photo-frame.is-active {
+  transform: scale(1.025);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.webgl-active) .plate-photo-frame,
+  html:not(.webgl-active) .plate-photo-frame:hover,
+  html:not(.webgl-active) .plate-photo-frame.is-active {
+    transform: none !important;
+  }
+}
+
 
