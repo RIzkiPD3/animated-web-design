@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1200" width="1800" height="1200">
+  <defs>
+    <linearGradient id="bg-06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181a1f" />
+      <stop offset="50%" stop-color="#0e1013" />
+      <stop offset="100%" stop-color="#08090b" />
+    </linearGradient>
+    <linearGradient id="spiral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d3038" />
+      <stop offset="60%" stop-color="#1a1c22" />
+      <stop offset="100%" stop-color="#0f1013" />
+    </linearGradient>
+  </defs>
+  <rect width="1800" height="1200" fill="url(#bg-06)" />
+  <!-- Helical Stairwell Geometry -->
+  <path d="M900,600 C1100,500 1300,700 1100,900 C900,1050 600,900 650,650 C700,450 1000,400 1150,550 C1250,680 1100,850 950,820 C850,800 820,700 900,600 Z" fill="none" stroke="url(#spiral)" stroke-width="80" stroke-linecap="round" />
+  <path d="M900,600 C1100,500 1300,700 1100,900 C900,1050 600,900 650,650 C700,450 1000,400 1150,550" fill="none" stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="2" />
+  <!-- Central Skylight Eye -->
+  <circle cx="900" cy="600" r="48" fill="#ebe7df" fill-opacity="0.85" />
+  <circle cx="900" cy="600" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="14" fill="#8a8b8f" letter-spacing="2">
+    <text x="90" y="110">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="90" y="140">PL-06 | 3:2 | 35MM OPTICAL MONOCHROME</text>
+    <text x="1710" y="110" text-anchor="end">ROTTERDAM / 2024</text>
+    <text x="1710" y="140" text-anchor="end">LEICA M11-P / 28MM F/5.6 1/125S ISO 160</text>
+    <text x="90" y="1140">HELICAL ASCENDANCE</text>
+    <text x="1710" y="1140" text-anchor="end">SERIES: ARCHITECTURAL MONOLITHS</text>
+  </g>
+  <rect x="60" y="60" width="1680" height="1080" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

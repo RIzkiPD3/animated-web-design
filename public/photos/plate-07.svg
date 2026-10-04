@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1800" width="1200" height="1800">
+  <defs>
+    <linearGradient id="bg-07" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a0b0d" />
+      <stop offset="60%" stop-color="#0d0e11" />
+      <stop offset="100%" stop-color="#14161a" />
+    </linearGradient>
+    <linearGradient id="arch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2c34" />
+      <stop offset="50%" stop-color="#1b1d22" />
+      <stop offset="100%" stop-color="#101114" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1800" fill="url(#bg-07)" />
+  <!-- Desert Plateau Base -->
+  <polygon points="100,1460 1100,1420 1100,1660 100,1660" fill="#131418" stroke="#8a8b8f" stroke-opacity="0.2" stroke-width="1" />
+  <!-- Monolith Portal Arch -->
+  <path d="M360,1460 L360,680 C360,420 840,420 840,680 L840,1420 L680,1430 L680,720 C680,560 520,560 520,720 L520,1450 Z" fill="url(#arch)" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Star / Distant Point Accent in the Portal -->
+  <circle cx="600" cy="880" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="13" fill="#8a8b8f" letter-spacing="2">
+    <text x="80" y="100">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="80" y="130">PL-07 | 2:3 | 35MM PANATOMIC-X</text>
+    <text x="1120" y="100" text-anchor="end">ATACAMA, CHILE / 2023</text>
+    <text x="1120" y="130" text-anchor="end">50MM F/8.0 1/500S ISO 100</text>
+    <text x="80" y="1720">MONOLITH PORTAL</text>
+    <text x="1120" y="1720" text-anchor="end">SERIES: CHROMA &amp; VOID</text>
+  </g>
+  <rect x="50" y="50" width="1100" height="1700" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

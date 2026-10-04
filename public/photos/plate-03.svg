@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1800" width="1440" height="1800">
+  <defs>
+    <linearGradient id="bg-03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15171a" />
+      <stop offset="50%" stop-color="#0c0d0f" />
+      <stop offset="100%" stop-color="#08090a" />
+    </linearGradient>
+    <linearGradient id="column-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#282a30" />
+      <stop offset="45%" stop-color="#1a1c20" />
+      <stop offset="100%" stop-color="#101114" />
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="1800" fill="url(#bg-03)" />
+  <!-- Hexagonal Basalt Columns -->
+  <g stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="1">
+    <polygon points="260,340 420,260 580,340 580,1540 420,1620 260,1540" fill="url(#column-grad)" />
+    <polygon points="580,420 740,340 900,420 900,1620 740,1700 580,1620" fill="url(#column-grad)" />
+    <polygon points="900,280 1060,200 1220,280 1220,1480 1060,1560 900,1480" fill="url(#column-grad)" />
+    <!-- Center Column Accent Joint -->
+    <line x1="420" y1="260" x2="420" y2="1620" stroke="#8a8b8f" stroke-opacity="0.4" />
+    <line x1="740" y1="340" x2="740" y2="1700" stroke="#8a8b8f" stroke-opacity="0.4" />
+    <line x1="1060" y1="200" x2="1060" y2="1560" stroke="#8a8b8f" stroke-opacity="0.4" />
+  </g>
+  <circle cx="740" cy="340" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="13" fill="#8a8b8f" letter-spacing="2">
+    <text x="80" y="100">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="80" y="130">PL-03 | 4:5 | 120 MEDIUM FORMAT PANATOMIC-X</text>
+    <text x="1360" y="100" text-anchor="end">VIK / 2023</text>
+    <text x="1360" y="130" text-anchor="end">HASSELBLAD 500C/M / 80MM F/5.6 1/60S ISO 100</text>
+    <text x="80" y="1720">BASALT CORE EXTRACTION</text>
+    <text x="1360" y="1720" text-anchor="end">SERIES: NOCTURNE STUDIES</text>
+  </g>
+  <rect x="50" y="50" width="1340" height="1700" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

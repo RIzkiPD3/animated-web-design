@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <linearGradient id="bg-05" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#141820" />
+      <stop offset="48%" stop-color="#0c0e12" />
+      <stop offset="50%" stop-color="#07080a" />
+      <stop offset="100%" stop-color="#050607" />
+    </linearGradient>
+    <linearGradient id="peaks" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#282d38" />
+      <stop offset="70%" stop-color="#181b22" />
+      <stop offset="100%" stop-color="#0c0e12" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg-05)" />
+  <!-- Horizon Meridian Line -->
+  <line x1="60" y1="540" x2="1860" y2="540" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Mountain Peaks -->
+  <polygon points="120,540 320,380 480,540" fill="url(#peaks)" />
+  <polygon points="420,540 680,290 840,460 980,540" fill="url(#peaks)" />
+  <polygon points="920,540 1160,330 1340,480 1480,540" fill="url(#peaks)" />
+  <polygon points="1420,540 1620,400 1780,540" fill="url(#peaks)" />
+  <!-- Water Mirror Reflection -->
+  <polygon points="120,540 320,700 480,540" fill="#0d0f14" opacity="0.6" />
+  <polygon points="420,540 680,790 840,620 980,540" fill="#0b0d11" opacity="0.6" />
+  <polygon points="920,540 1160,750 1340,600 1480,540" fill="#0d0f14" opacity="0.6" />
+  <polygon points="1420,540 1620,680 1780,540" fill="#0b0d11" opacity="0.6" />
+  <circle cx="680" cy="290" r="3" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="13" fill="#8a8b8f" letter-spacing="2">
+    <text x="80" y="90">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="80" y="120">PL-05 | 16:9 | 4X5 SHEET VELVIA 50</text>
+    <text x="1840" y="90" text-anchor="end">SENJA, NORWAY / 2023</text>
+    <text x="1840" y="120" text-anchor="end">LINHOF 4X5 / 90MM F/11 2S ISO 50</text>
+    <text x="80" y="1010">FJORD HORIZON MERIDIAN</text>
+    <text x="1840" y="1010" text-anchor="end">SERIES: CHROMA &amp; VOID</text>
+  </g>
+  <rect x="50" y="50" width="1820" height="980" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>

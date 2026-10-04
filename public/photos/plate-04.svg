@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600" width="1600" height="1600">
+  <defs>
+    <radialGradient id="bg-04" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#1c1e22" />
+      <stop offset="50%" stop-color="#0e0f12" />
+      <stop offset="100%" stop-color="#070809" />
+    </radialGradient>
+    <radialGradient id="aperture-core" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ebe7df" stop-opacity="0.9" />
+      <stop offset="40%" stop-color="#d97736" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0d0e10" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1600" fill="url(#bg-04)" />
+  <!-- Concentric Aperture Rings -->
+  <circle cx="800" cy="800" r="520" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+  <circle cx="800" cy="800" r="420" fill="none" stroke="#8a8b8f" stroke-opacity="0.25" stroke-width="1" />
+  <circle cx="800" cy="800" r="320" fill="#14161a" stroke="#8a8b8f" stroke-opacity="0.35" stroke-width="1" />
+  <!-- Aperture Blades Geometry -->
+  <polygon points="800,560 980,680 940,920 800,800" fill="#202227" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <polygon points="980,680 1040,880 880,1040 800,800" fill="#1b1c20" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <polygon points="1040,880 920,1060 680,1040 800,800" fill="#23252b" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <polygon points="920,1060 700,1080 580,920 800,800" fill="#18191d" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <polygon points="700,1080 560,940 620,700 800,800" fill="#22242a" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <polygon points="560,940 620,700 780,580 800,800" fill="#1a1b1f" stroke="#8a8b8f" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Central Iris Core -->
+  <circle cx="800" cy="800" r="140" fill="url(#aperture-core)" />
+  <circle cx="800" cy="800" r="4" fill="#d97736" />
+  <!-- Plate Archival Marks -->
+  <g font-family="monospace" font-size="13" fill="#8a8b8f" letter-spacing="2">
+    <text x="80" y="100">ATELIER OBSCURA / ARCHIVAL PLATE</text>
+    <text x="80" y="130">PL-04 | 1:1 | 120 TRI-X 400</text>
+    <text x="1520" y="100" text-anchor="end">BERLIN / 2024</text>
+    <text x="1520" y="130" text-anchor="end">50MM F/8.0 1/30S ISO 100</text>
+    <text x="80" y="1520">APERTURE STUDY NO. 4</text>
+    <text x="1520" y="1520" text-anchor="end">SERIES: NOCTURNE STUDIES</text>
+  </g>
+  <rect x="50" y="50" width="1500" height="1500" fill="none" stroke="#8a8b8f" stroke-opacity="0.15" stroke-width="1" />
+</svg>
