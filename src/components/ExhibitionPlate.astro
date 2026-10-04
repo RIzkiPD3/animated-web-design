@@ -33,8 +33,9 @@ const alignmentClasses = {
     <!-- Photographic Plate Frame -->
     <figure class="plate-figure m-0 space-y-4">
       <div
-        class="relative overflow-hidden bg-[#07080a] border border-muted/15"
+        class="plate-photo-frame relative overflow-hidden bg-[#07080a] border border-muted/15 transition-colors duration-700"
         style={`aspect-ratio: ${photo.image.width} / ${photo.image.height};`}
+        data-plate-id={photo.id}
       >
         <img
           src={photo.image.src}
@@ -43,7 +44,7 @@ const alignmentClasses = {
           height={photo.image.height}
           loading={isFirst ? 'eager' : 'lazy'}
           decoding="async"
-          class="plate-photo w-full h-full object-contain block"
+          class="plate-photo plate-photo-dom w-full h-full object-contain block transition-opacity duration-700"
         />
       </div>
 

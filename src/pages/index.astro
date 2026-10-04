@@ -19,7 +19,14 @@ const layoutVariants: Array<'left' | 'right' | 'left-center' | 'wide' | 'center'
 ---
 
 <BaseLayout title="Atelier Obscura · Exhibition Runway">
-  <main class="viewport-padding relative min-h-screen">
+  <!-- Three.js Spatial Photography Canvas -->
+  <canvas
+    id="spatial-canvas"
+    class="fixed inset-0 w-full h-full pointer-events-none z-0"
+    aria-hidden="true"
+  ></canvas>
+
+  <main class="viewport-padding relative z-10 min-h-screen">
     <!-- Exhibition Introduction Header -->
     <header id="introduction" class="pt-20 md:pt-32 pb-16 md:pb-28 max-w-4xl space-y-8 scroll-mt-12">
       <!-- Archive Identity -->
@@ -99,6 +106,10 @@ const layoutVariants: Array<'left' | 'right' | 'left-center' | 'wide' | 'center'
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initSpatialLayer } from '../scripts/spatial-layer';
+
+  // Initialize Three.js Spatial Photography Layer
+  initSpatialLayer();
 
   gsap.registerPlugin(ScrollTrigger);
 
