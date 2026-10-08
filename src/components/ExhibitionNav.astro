@@ -1,0 +1,135 @@
+---
+interface Props {
+  currentPlate?: {
+    plateNumber: string;
+    title: string;
+    slug: string;
+    prevSlug?: string;
+    nextSlug?: string;
+  };
+}
+
+const { currentPlate } = Astro.props;
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const isRunway = pathname === '/';
+const isArchive = pathname === '/archive';
+const isMonograph = pathname.startsWith('/archive/') && pathname !== '/archive';
+---
+
+<header class="global-exhibition-nav sticky top-0 z-40 w-full bg-[#0d0e10]/94 backdrop-blur-md border-b border-muted/15 transition-all duration-300" aria-label="Primary Exhibition Navigation">
+  <div class="viewport-padding mx-auto flex items-center justify-between h-14 md:h-16">
+
+    <!-- Left: Archive Identity -->
+    <div class="flex items-center gap-3">
+      <a
+        href="/"
+        class="nav-brand flex items-center gap-2.5 group focus-visible:outline-none min-h-[44px] py-2"
+        aria-label="Atelier Obscura — Return to Exhibition Runway"
+      >
+        <span class="nav-brand-mark w-2 h-2 rounded-full bg-accent transition-transform duration-300 group-hover:scale-125" aria-hidden="true"></span>
+        <span class="nav-brand-title font-serif tracking-wider text-foreground text-sm sm:text-base font-medium group-hover:text-accent transition-colors duration-200">
+          Atelier Obscura
+        </span>
+      </a>
+      <span class="hidden md:inline text-muted/30 font-mono text-xs" aria-hidden="true">/</span>
+      <span class="hidden md:inline text-muted/60 font-mono text-xs tracking-widest uppercase">
+        Kroma Archive
+      </span>
+    </div>
+
+    <!-- Center: Curatorial Mode Switcher (Runway ↔ Contact Sheet) -->
+    <nav class="nav-modes flex items-center gap-1 sm:gap-2" aria-label="Curatorial modes">
+      <a
+        href="/"
+        class:list={[
+          'nav-mode-link inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs tracking-wider uppercase transition-colors duration-200 min-h-[44px]',
+          isRunway ? 'is-active text-foreground font-medium' : 'text-muted hover:text-foreground'
+        ]}
+        aria-current={isRunway ? 'page' : undefined}
+      >
+        {isRunway && <span class="nav-active-dot w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />}
+        <span>Runway</span>
+      </a>
+
+      <span class="text-muted/20 font-mono text-xs select-none" aria-hidden="true">|</span>
+
+      <a
+        href="/archive"
+        class:list={[
+          'nav-mode-link inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs tracking-wider uppercase transition-colors duration-200 min-h-[44px]',
+          isArchive ? 'is-active text-foreground font-medium' : 'text-muted hover:text-foreground'
+        ]}
+        aria-current={isArchive ? 'page' : undefined}
+      >
+        {isArchive && <span class="nav-active-dot w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />}
+        <span>Contact Sheet</span>
+      </a>
+    </nav>
+
+    <!-- Right: Contextual Telemetry or Monograph Prev/Next Controls -->
+    <div class="nav-context flex items-center gap-3">
+      {isMonograph && currentPlate ? (
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <!-- Plate number badge -->
+          <span class="hidden sm:inline-block font-mono text-xs text-accent tracking-widest uppercase mr-1">
+            {currentPlate.plateNumber}
+          </span>
+
+          <!-- Previous Plate Link -->
+          {currentPlate.prevSlug ? (
+            <a
+              href={`/archive/${currentPlate.prevSlug}`}
+              class="nav-quick-arrow inline-flex items-center justify-center w-8 h-8 text-muted hover:text-foreground font-mono text-xs border border-muted/20 hover:border-accent/40 rounded-sm transition-colors focus-visible:outline-none"
+              aria-label="Previous photograph"
+              title="Previous photograph (Left Arrow key)"
+            >
+              ←
+            </a>
+          ) : (
+            <span
+              class="inline-flex items-center justify-center w-8 h-8 text-muted/20 font-mono text-xs border border-muted/10 rounded-sm cursor-not-allowed select-none"
+              aria-hidden="true"
+            >
+              ←
+            </span>
+          )}
+
+          <!-- Next Plate Link -->
+          {currentPlate.nextSlug ? (
+            <a
+              href={`/archive/${currentPlate.nextSlug}`}
+              class="nav-quick-arrow inline-flex items-center justify-center w-8 h-8 text-muted hover:text-foreground font-mono text-xs border border-muted/20 hover:border-accent/40 rounded-sm transition-colors focus-visible:outline-none"
+              aria-label="Next photograph"
+              title="Next photograph (Right Arrow key)"
+            >
+              →
+            </a>
+          ) : (
+            <span
+              class="inline-flex items-center justify-center w-8 h-8 text-muted/20 font-mono text-xs border border-muted/10 rounded-sm cursor-not-allowed select-none"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          )}
+
+          <!-- Close / Return to Contact Sheet -->
+          <a
+            href="/archive"
+            class="inline-flex items-center justify-center px-2.5 h-8 text-muted hover:text-foreground font-mono text-xs tracking-wider border border-muted/20 hover:border-accent/40 rounded-sm transition-colors focus-visible:outline-none ml-1"
+            aria-label="Close monograph and return to Contact Sheet"
+            title="Return to Contact Sheet (Escape key)"
+          >
+            INDEX ✕
+          </a>
+        </div>
+      ) : (
+        <div class="text-metadata text-muted/60 font-mono text-xs tracking-widest uppercase hidden lg:block">
+          {isRunway ? 'Sequential · 8 Plates' : 'Catalogue · 3 Series'}
+        </div>
+      )}
+    </div>
+
+  </div>
+</header>
