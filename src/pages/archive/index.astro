@@ -1,0 +1,318 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPhotographs } from '../../data/photos';
+import type { Photograph } from '../../types/photography';
+
+const photos = getPhotographs();
+
+// Extract unique series from photograph metadata
+const seriesList = Array.from(new Set(photos.map((p) => p.metadata.series)));
+
+const seriesCounts: Record<string, number> = {
+  all: photos.length,
+};
+seriesList.forEach((series) => {
+  seriesCounts[series] = photos.filter((p) => p.metadata.series === series).length;
+});
+
+const pageTitle = 'Contact Sheet · Archive Overview · Atelier Obscura';
+const pageDescription =
+  'Curatorial overview and photographic contact sheet for Atelier Obscura. Authentic aspect ratios, series taxonomy, and photographic plate catalogue.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <main class="archive-overview-page viewport-padding min-h-screen" id="archive-top">
+
+    <!-- Top Navigation / Back to Runway -->
+    <nav class="archive-nav" aria-label="Runway navigation">
+      <div class="flex items-center justify-between">
+        <a
+          href="/"
+          id="nav-to-runway"
+          class="archive-nav-link text-metadata text-muted font-mono tracking-widest uppercase inline-flex items-center gap-2 hover:text-foreground transition-colors duration-300 focus-visible:outline-none"
+        >
+          <span aria-hidden="true">←</span>
+          Exhibition Runway
+        </a>
+        <div class="text-metadata text-muted/60 font-mono tracking-widest uppercase text-xs">
+          Catalogue Mode · Index
+        </div>
+      </div>
+    </nav>
+
+    <!-- Archive Header / Curatorial Statement -->
+    <header class="archive-header">
+      <div class="archive-identity text-metadata text-muted font-mono tracking-widest uppercase">
+        Atelier Obscura / Kroma Archive
+      </div>
+
+      <h1 class="archive-title text-display text-foreground font-serif tracking-tight mt-3">
+        Contact Sheet
+      </h1>
+
+      <p class="archive-statement text-heading text-muted/90 font-serif leading-snug mt-4 max-w-3xl">
+        Photographic negative proofing across three curated investigative series.
+      </p>
+
+      <p class="archive-description text-body text-muted leading-relaxed mt-3 max-w-2xl">
+        All eight plates are rendered without uniform cropping or dimensional compromise. Select any photograph to open its dedicated deep monograph, archival telemetry, and curatorial exposition.
+      </p>
+
+      <!-- Ledger telemetry divider -->
+      <div class="archive-ledger mt-8 pt-5 border-t border-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-metadata text-muted font-mono">
+        <div class="space-y-1">
+          <span class="text-foreground">INVENTORY: {photos.length} ARCHIVAL PLATES</span>
+          <span class="hidden sm:inline"> · </span>
+          <span>SERIES: {seriesList.length} CANONS</span>
+          <span class="hidden sm:inline"> · </span>
+          <span>FORMATS: 3:2, 2:3, 4:5, 1:1, 16:9</span>
+        </div>
+        <div class="text-muted/70 text-xs">
+          OPTICAL MONOCHROME & EMULSION
+        </div>
+      </div>
+    </header>
+
+    <!-- Catalogue Controls & Series Filter -->
+    <section class="archive-controls-section" aria-label="Archive filters">
+      <div class="archive-controls-bar flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 border-y border-muted/20">
+        <!-- Series Filter Buttons -->
+        <nav class="archive-filter-nav flex flex-wrap items-center gap-2 sm:gap-3" aria-label="Filter plates by series">
+          <button
+            type="button"
+            class="archive-filter-btn is-active"
+            data-filter="all"
+            aria-pressed="true"
+            aria-controls="archive-grid"
+          >
+            <span class="filter-indicator" aria-hidden="true"></span>
+            <span>All Plates</span>
+            <span class="filter-count">({seriesCounts.all})</span>
+          </button>
+
+          {seriesList.map((series) => (
+            <button
+              type="button"
+              class="archive-filter-btn"
+              data-filter={series}
+              aria-pressed="false"
+              aria-controls="archive-grid"
+            >
+              <span class="filter-indicator" aria-hidden="true"></span>
+              <span>{series}</span>
+              <span class="filter-count">({seriesCounts[series]})</span>
+            </button>
+          ))}
+        </nav>
+
+        <!-- Dynamic Counter Display -->
+        <div class="archive-count-display text-metadata font-mono text-muted/80 whitespace-nowrap">
+          <span id="plate-count-number">{photos.length}</span> of {photos.length} plates catalogued
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Sheet Grid / Photography Canvas -->
+    <section class="archive-grid-section pt-10 pb-20" aria-label="Archival plates collection">
+      <div id="archive-grid" class="archive-masonry-grid" role="list">
+        {photos.map((photo) => (
+          <article
+            class={`archive-plate-card ${photo.presentation.orientation === 'panoramic' ? 'is-panoramic' : ''}`}
+            data-plate-id={photo.id}
+            data-series={photo.metadata.series}
+            role="listitem"
+          >
+            <a
+              href={`/archive/${photo.slug}`}
+              class="archive-plate-link group block focus-visible:outline-none"
+              aria-label={`Open monograph: ${photo.metadata.plateNumber} ${photo.title} (${photo.metadata.series})`}
+            >
+              <!-- Archival Film Rebate Header -->
+              <div class="plate-rebate flex items-center justify-between pb-2 text-metadata font-mono">
+                <span class="plate-number text-accent tracking-widest font-medium">
+                  {photo.metadata.plateNumber}
+                </span>
+                <span class="plate-medium text-muted/60 text-xs tracking-wider">
+                  {photo.metadata.focalLength} · {photo.metadata.medium.split(' ')[0]}
+                </span>
+              </div>
+
+              <!-- Photograph Frame with Intrinsic Ratio Protection -->
+              <div
+                class="archive-photo-frame relative overflow-hidden bg-[#07080a] border border-muted/15 transition-all duration-300"
+                style={`aspect-ratio: ${photo.image.width} / ${photo.image.height};`}
+              >
+                <!-- Reticle Optical Corner Marks -->
+                <div class="reticle-mark reticle-tl" aria-hidden="true"></div>
+                <div class="reticle-mark reticle-tr" aria-hidden="true"></div>
+                <div class="reticle-mark reticle-bl" aria-hidden="true"></div>
+                <div class="reticle-mark reticle-br" aria-hidden="true"></div>
+
+                <img
+                  src={photo.image.src}
+                  alt={photo.image.alt}
+                  width={photo.image.width}
+                  height={photo.image.height}
+                  loading={photo.presentation.order <= 4 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  class="archive-photo w-full h-full object-contain block transition-transform duration-500 group-hover:scale-[1.015]"
+                />
+
+                <!-- Hover Inspection Prompt (Understated) -->
+                <div class="archive-frame-action text-metadata font-mono tracking-widest uppercase" aria-hidden="true">
+                  <span>Open Monograph</span>
+                </div>
+              </div>
+
+              <!-- Archival Plate Caption & Technical Footer -->
+              <div class="plate-footer pt-3 space-y-1">
+                <div class="flex items-baseline justify-between gap-2">
+                  <h2 class="plate-title text-foreground font-serif text-lg leading-tight group-hover:text-accent transition-colors duration-300">
+                    {photo.title}
+                  </h2>
+                  <span class="plate-year text-metadata font-mono text-muted/60 text-xs">
+                    {photo.metadata.year}
+                  </span>
+                </div>
+
+                <div class="flex items-center justify-between text-metadata font-mono text-muted/70 text-xs">
+                  <span class="plate-series tracking-wide">
+                    {photo.metadata.series}
+                  </span>
+                  <span class="plate-ratio tracking-widest text-muted/50">
+                    {photo.image.aspectRatio}
+                  </span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Archive Epilogue / Footer -->
+    <footer class="archive-footer py-16 md:py-24 border-t border-muted/20 text-center max-w-2xl mx-auto space-y-6">
+      <div class="text-metadata text-muted font-mono tracking-widest uppercase">
+        Atelier Obscura · Archive Overview
+      </div>
+
+      <p class="text-body text-muted leading-relaxed">
+        All exposures stored under strict curatorial provenance. Formats faithfully preserved from 35mm and medium format emulsions.
+      </p>
+
+      <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-6 text-metadata font-mono">
+        <a
+          href="/"
+          class="text-accent tracking-wider uppercase inline-flex items-center gap-2 hover:underline focus-visible:outline-none"
+        >
+          <span aria-hidden="true">←</span>
+          Return to Exhibition Runway
+        </a>
+        <a
+          href="#archive-top"
+          class="text-muted hover:text-foreground tracking-wider uppercase inline-flex items-center gap-1.5 focus-visible:outline-none transition-colors duration-200"
+        >
+          Back to Top ↑
+        </a>
+      </div>
+    </footer>
+  </main>
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // Client-side Series Filter & Interaction Logic
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>('.archive-filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.archive-plate-card');
+  const countNumber = document.getElementById('plate-count-number');
+  const totalCount = cards.length;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Filter interaction
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const selectedFilter = btn.dataset.filter;
+      if (!selectedFilter) return;
+
+      // Update button active states
+      filterButtons.forEach((b) => {
+        const isActive = b === btn;
+        b.classList.toggle('is-active', isActive);
+        b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cardSeries = card.dataset.series;
+        const matches = selectedFilter === 'all' || cardSeries === selectedFilter;
+
+        if (matches) {
+          visibleCount++;
+          if (prefersReducedMotion) {
+            card.style.display = '';
+            card.style.opacity = '1';
+          } else {
+            card.style.display = '';
+            gsap.fromTo(
+              card,
+              { opacity: 0, y: 12 },
+              { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }
+            );
+          }
+        } else {
+          if (prefersReducedMotion) {
+            card.style.display = 'none';
+          } else {
+            gsap.to(card, {
+              opacity: 0,
+              y: -8,
+              duration: 0.25,
+              ease: 'power2.in',
+              onComplete: () => {
+                card.style.display = 'none';
+              },
+            });
+          }
+        }
+      });
+
+      if (countNumber) {
+        countNumber.textContent = String(visibleCount);
+      }
+    });
+  });
+
+  // Entrance animation for cards on initial page load
+  if (!prefersReducedMotion) {
+    const header = document.querySelector<HTMLElement>('.archive-header');
+    const controls = document.querySelector<HTMLElement>('.archive-controls-section');
+    const plateCards = document.querySelectorAll<HTMLElement>('.archive-plate-card');
+
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+    if (header) {
+      tl.fromTo(header, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 });
+    }
+    if (controls) {
+      tl.fromTo(controls, { opacity: 0 }, { opacity: 1, duration: 0.45 }, '-=0.2');
+    }
+    if (plateCards.length) {
+      tl.fromTo(
+        plateCards,
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.55, stagger: 0.06 },
+        '-=0.2'
+      );
+    }
+  }
+
+  // Keyboard navigation: Escape key returns to Exhibition Runway
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      window.location.href = '/';
+    }
+  });
+</script>

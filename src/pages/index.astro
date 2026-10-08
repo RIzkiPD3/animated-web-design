@@ -55,7 +55,13 @@ const layoutVariants: Array<'left' | 'right' | 'left-center' | 'wide' | 'center'
           <span class="hidden sm:inline"> · </span>
           <span>RATIOS: 3:2, 2:3, 4:5, 1:1, 16:9</span>
         </div>
-        <div>
+        <div class="flex items-center gap-6">
+          <a
+            href="/archive"
+            class="text-muted hover:text-foreground tracking-wider uppercase inline-flex items-center gap-1.5 focus-visible:outline-none transition-colors duration-200"
+          >
+            Contact Sheet →
+          </a>
           <a
             href={`#${photos[0]?.slug}`}
             class="text-accent tracking-wider uppercase hover:underline inline-flex items-center gap-1.5 focus-visible:outline-none"
@@ -91,7 +97,13 @@ const layoutVariants: Array<'left' | 'right' | 'left-center' | 'wide' | 'center'
         All eight plates rendered in intrinsic aspect ratios on an obsidian slate canvas with tungsten telemetry reference.
       </p>
 
-      <div class="pt-4">
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-6">
+        <a
+          href="/archive"
+          class="text-metadata text-muted hover:text-foreground tracking-wider uppercase inline-flex items-center gap-2 focus-visible:outline-none transition-colors duration-200"
+        >
+          Open Contact Sheet →
+        </a>
         <a
           href="#introduction"
           class="text-metadata text-accent tracking-wider uppercase inline-flex items-center gap-2 hover:underline focus-visible:outline-none"

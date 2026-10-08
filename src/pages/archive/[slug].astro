@@ -30,16 +30,29 @@ const pageDescription = photo.editorial.caption;
 <BaseLayout title={pageTitle} description={pageDescription}>
   <main class="monograph-page viewport-padding min-h-screen" id="monograph-top">
 
-    <!-- Return Link -->
-    <nav class="monograph-nav" aria-label="Archive navigation">
-      <a
-        href="/"
-        id="back-to-runway"
-        class="monograph-back-link text-metadata text-muted font-mono tracking-widest uppercase inline-flex items-center gap-2 hover:text-foreground transition-colors duration-300 focus-visible:outline-none"
-      >
-        <span aria-hidden="true">←</span>
-        Exhibition Runway
-      </a>
+    <!-- Return Links -->
+    <nav class="monograph-nav flex items-center justify-between" aria-label="Archive navigation">
+      <div class="flex items-center gap-4">
+        <a
+          href="/archive"
+          id="back-to-archive"
+          class="monograph-back-link text-metadata text-muted font-mono tracking-widest uppercase inline-flex items-center gap-2 hover:text-foreground transition-colors duration-300 focus-visible:outline-none"
+        >
+          <span aria-hidden="true">←</span>
+          Contact Sheet
+        </a>
+        <span class="text-muted/30 font-mono text-xs" aria-hidden="true">/</span>
+        <a
+          href="/"
+          id="back-to-runway"
+          class="monograph-back-link text-metadata text-muted/70 font-mono tracking-widest uppercase inline-flex items-center gap-1.5 hover:text-foreground transition-colors duration-300 focus-visible:outline-none"
+        >
+          Runway
+        </a>
+      </div>
+      <div class="text-metadata text-muted/50 font-mono tracking-widest uppercase text-xs hidden sm:block">
+        Plate {photo.metadata.plateNumber}
+      </div>
     </nav>
 
     <!-- Monograph Body -->
@@ -256,10 +269,10 @@ const pageDescription = photo.editorial.caption;
     }
   }
 
-  // Keyboard: press Escape to return to runway
+  // Keyboard: press Escape to return to archive overview
   document.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
-      window.location.href = '/';
+      window.location.href = '/archive';
     }
   });
 </script>
