@@ -496,3 +496,217 @@ html:not(.webgl-active) .plate-photo-frame.is-active {
     transform: none !important;
   }
 }
+
+/* ============================================================
+   CONTACT SHEET / ARCHIVE OVERVIEW — Feature 07
+   /archive catalogue overview
+   Image-first, authentic aspect ratios, restrained index controls.
+   ENERGY 2 / RHYTHM 3 / MOTION 2
+   ============================================================ */
+
+.archive-overview-page {
+  padding-bottom: clamp(4rem, 8vw, 8rem);
+}
+
+.archive-nav {
+  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(2rem, 3vw, 2.5rem);
+}
+
+.archive-nav-link {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.archive-header {
+  max-width: 52rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.archive-title {
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+/* Filter Controls Navigation */
+.archive-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  min-height: 44px; /* Accessible touch target */
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  background-color: transparent;
+  border: 1px solid rgba(138, 139, 143, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.archive-filter-btn:hover {
+  color: var(--color-foreground);
+  border-color: rgba(235, 231, 223, 0.35);
+}
+
+.archive-filter-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.archive-filter-btn.is-active {
+  color: var(--color-foreground);
+  border-color: var(--color-accent);
+  background-color: rgba(217, 119, 54, 0.08);
+}
+
+.filter-indicator {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background-color: rgba(138, 139, 143, 0.4);
+  transition: background-color 0.25s ease;
+}
+
+.archive-filter-btn.is-active .filter-indicator {
+  background-color: var(--color-accent);
+}
+
+.filter-count {
+  font-size: 0.6875rem;
+  opacity: 0.65;
+}
+
+/* Contact Sheet Masonry Grid */
+.archive-masonry-grid {
+  columns: 1;
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+@media (min-width: 640px) {
+  .archive-masonry-grid {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .archive-masonry-grid {
+    columns: 3;
+    column-gap: 3rem;
+  }
+
+  .archive-plate-card.is-panoramic {
+    column-span: all;
+    margin-top: 2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .archive-plate-card.is-panoramic .archive-photo-frame {
+    max-height: 70vh;
+  }
+}
+
+.archive-plate-card {
+  break-inside: avoid;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  position: relative;
+}
+
+/* Plate links and frames */
+.archive-plate-link:focus-visible .archive-photo-frame {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.archive-photo-frame {
+  position: relative;
+  width: 100%;
+  border: 1px solid rgba(138, 139, 143, 0.15);
+  transition: border-color 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archive-plate-link:hover .archive-photo-frame {
+  border-color: rgba(217, 119, 54, 0.45);
+}
+
+/* Optical Reticle Corner Marks */
+.reticle-mark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-style: solid;
+  border-color: rgba(138, 139, 143, 0.3);
+  pointer-events: none;
+  z-index: 2;
+  transition: border-color 0.3s ease, opacity 0.3s ease;
+}
+
+.reticle-tl {
+  top: 6px;
+  left: 6px;
+  border-width: 1px 0 0 1px;
+}
+
+.reticle-tr {
+  top: 6px;
+  right: 6px;
+  border-width: 1px 1px 0 0;
+}
+
+.reticle-bl {
+  bottom: 6px;
+  left: 6px;
+  border-width: 0 0 1px 1px;
+}
+
+.reticle-br {
+  bottom: 6px;
+  right: 6px;
+  border-width: 0 1px 1px 0;
+}
+
+.archive-plate-link:hover .reticle-mark,
+.archive-plate-link:focus-visible .reticle-mark {
+  border-color: var(--color-accent);
+  opacity: 1;
+}
+
+/* Frame inspection action prompt */
+.archive-frame-action {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  background-color: rgba(13, 14, 16, 0.85);
+  border: 1px solid rgba(217, 119, 54, 0.35);
+  color: var(--color-accent);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.archive-plate-link:hover .archive-frame-action,
+.archive-plate-link:focus-visible .archive-frame-action {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-plate-card,
+  .archive-photo-frame,
+  .archive-photo,
+  .archive-frame-action {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
