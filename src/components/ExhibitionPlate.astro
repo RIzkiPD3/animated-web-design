@@ -25,17 +25,22 @@ const alignmentClasses = {
 ---
 
 <section
-  class="exhibition-moment my-24 md:my-36 lg:my-48 first:mt-12 last:mb-32 scroll-mt-24"
+  class="exhibition-moment my-24 md:my-36 lg:my-48 first:mt-12 last:mb-32 scroll-mt-24 transition-opacity duration-500"
   id={photo.slug}
   data-plate={photo.metadata.plateNumber}
+  data-plate-id={photo.id}
 >
   <div class={`w-full ${alignmentClasses} space-y-6`}>
     <!-- Photographic Plate Frame -->
     <figure class="plate-figure m-0 space-y-4">
       <div
-        class="plate-photo-frame relative overflow-hidden bg-[#07080a] border border-muted/15 transition-colors duration-700"
+        class="plate-photo-frame relative overflow-hidden bg-[#07080a] border border-muted/15 transition-all duration-500 cursor-pointer focus-visible:outline-none"
         style={`aspect-ratio: ${photo.image.width} / ${photo.image.height};`}
         data-plate-id={photo.id}
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+        aria-label={`Inspect archival plate ${photo.metadata.plateNumber}: ${photo.title}`}
       >
         <img
           src={photo.image.src}
@@ -44,8 +49,20 @@ const alignmentClasses = {
           height={photo.image.height}
           loading={isFirst ? 'eager' : 'lazy'}
           decoding="async"
-          class="plate-photo plate-photo-dom w-full h-full object-contain block transition-opacity duration-700"
+          class="plate-photo plate-photo-dom w-full h-full object-contain block transition-all duration-700"
         />
+
+        <!-- Optical Rangefinder Viewfinder Reticles -->
+        <span class="optical-reticle absolute top-3 left-3 w-3 h-3 border-t border-l border-accent opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true"></span>
+        <span class="optical-reticle absolute top-3 right-3 w-3 h-3 border-t border-r border-accent opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true"></span>
+        <span class="optical-reticle absolute bottom-3 left-3 w-3 h-3 border-b border-l border-accent opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true"></span>
+        <span class="optical-reticle absolute bottom-3 right-3 w-3 h-3 border-b border-r border-accent opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true"></span>
+        <span class="optical-reticle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-xs text-accent/70 leading-none select-none opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true">+</span>
+
+        <!-- Optical Status Indicator -->
+        <span class="plate-status-badge absolute bottom-3 right-6 text-[10px] font-mono tracking-widest text-accent uppercase bg-[#0d0e10]/90 px-1.5 py-0.5 border border-accent/40 select-none opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true">
+          INSPECT
+        </span>
       </div>
 
       <!-- Plate Identity & Editorial Description -->

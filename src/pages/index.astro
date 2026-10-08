@@ -107,6 +107,10 @@ const layoutVariants: Array<'left' | 'right' | 'left-center' | 'wide' | 'center'
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import { initSpatialLayer } from '../scripts/spatial-layer';
+  import { initPhotographyInteractions } from '../scripts/photography-interaction';
+
+  // Initialize Photography Interactions (DOM & Accessibility)
+  initPhotographyInteractions();
 
   // Initialize Three.js Spatial Photography Layer
   initSpatialLayer();
