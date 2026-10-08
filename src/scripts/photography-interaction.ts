@@ -5,8 +5,8 @@
  * Implements tactile, restrained, editorial photography interactions:
  * - Desktop: Hover reticle reveal, optical status badge, subtle pointer tilt
  * - Focus: Visual focus ring, spatial elevation, curatorial runway dimming
- * - Keyboard: Tab focus, Enter/Space activation, Escape dismissal
- * - Mobile: Tap inspection, touch-friendly, native scroll preservation
+ * - Keyboard: Tab focus, Enter/Space to open Deep Monograph, Escape dismissal
+ * - Mobile: Tap to open Deep Monograph, touch-friendly, native scroll preservation
  * - Progressive Enhancement: Complete DOM functionality if WebGL is unavailable
  */
 
@@ -14,6 +14,19 @@ export interface PlateInteractionDetail {
   plateId: string;
   localX?: number;
   localY?: number;
+}
+
+// Maps plate element dataset.plateId to its archive slug
+function getSlugForPlate(plateId: string): string | null {
+  const section = document.querySelector<HTMLElement>(`.exhibition-moment[data-plate-id="${plateId}"]`);
+  if (!section) {
+    // Fallback: derive from the section id via plate-id on the frame
+    const frame = document.querySelector<HTMLElement>(`.plate-photo-frame[data-plate-id="${plateId}"]`);
+    const moment = frame?.closest<HTMLElement>('.exhibition-moment');
+    if (moment?.id) return moment.id;
+    return null;
+  }
+  return section.id || null;
 }
 
 export function initPhotographyInteractions(): (() => void) | undefined {
@@ -28,16 +41,22 @@ export function initPhotographyInteractions(): (() => void) | undefined {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+  function navigateToMonograph(plateId: string) {
+    const slug = getSlugForPlate(plateId);
+    if (!slug) return;
+    window.location.href = `/archive/${slug}`;
+  }
+
   function setActivePlate(plateId: string | null) {
-    if (activePlateId === plateId) {
-      // Toggle off if same plate clicked/activated again
-      plateId = null;
+    // Navigate to Deep Monograph on activation
+    if (plateId) {
+      navigateToMonograph(plateId);
+      return;
     }
 
     const previousId = activePlateId;
-    activePlateId = plateId;
+    activePlateId = null;
 
-    // Reset previous active plate DOM elements
     if (previousId) {
       const prevFrame = document.querySelector<HTMLElement>(`.plate-photo-frame[data-plate-id="${previousId}"]`);
       if (prevFrame) {
@@ -52,32 +71,10 @@ export function initPhotographyInteractions(): (() => void) | undefined {
       }
     }
 
-    // Apply new active plate DOM elements
-    if (activePlateId) {
-      document.body.classList.add('has-active-plate');
-      const activeFrame = document.querySelector<HTMLElement>(`.plate-photo-frame[data-plate-id="${activePlateId}"]`);
-      if (activeFrame) {
-        activeFrame.classList.add('is-active');
-        activeFrame.setAttribute('aria-pressed', 'true');
-        const badge = activeFrame.querySelector('.plate-status-badge');
-        if (badge) badge.textContent = 'ACTIVE';
-      }
-      const activeMoment = document.querySelector<HTMLElement>(`.exhibition-moment[data-plate-id="${activePlateId}"]`);
-      if (activeMoment) {
-        activeMoment.classList.add('is-active-moment');
-      }
-
-      window.dispatchEvent(
-        new CustomEvent<PlateInteractionDetail>('plate:activate', {
-          detail: { plateId: activePlateId },
-        })
-      );
-    } else {
-      document.body.classList.remove('has-active-plate');
-      window.dispatchEvent(
-        new CustomEvent<{}>('plate:deactivate', { detail: {} })
-      );
-    }
+    document.body.classList.remove('has-active-plate');
+    window.dispatchEvent(
+      new CustomEvent<{}>('plate:deactivate', { detail: {} })
+    );
   }
 
   // Bind per-frame interactions
@@ -125,17 +122,17 @@ export function initPhotographyInteractions(): (() => void) | undefined {
       );
     };
 
-    // Click / Touch Tap
+    // Click / Touch Tap: navigate to Deep Monograph
     const onClick = (e: MouseEvent) => {
       e.stopPropagation();
-      setActivePlate(plateId);
+      navigateToMonograph(plateId);
     };
 
-    // Keyboard Activation (Enter / Space)
+    // Keyboard Activation (Enter / Space): navigate to Deep Monograph
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        setActivePlate(plateId);
+        navigateToMonograph(plateId);
       }
     };
 
@@ -146,7 +143,7 @@ export function initPhotographyInteractions(): (() => void) | undefined {
     frame.addEventListener('keydown', onKeyDown);
   });
 
-  // Global dismiss handlers: Escape key and outside click
+  // Global dismiss handler: Escape key (no-op since navigation is one-way)
   const onGlobalKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && activePlateId !== null) {
       setActivePlate(null);

@@ -1,0 +1,265 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPhotographs, getPhotographBySlug } from '../../data/photos';
+import type { Photograph } from '../../types/photography';
+
+export async function getStaticPaths() {
+  const photos = getPhotographs();
+  return photos.map((photo) => ({
+    params: { slug: photo.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const photo = getPhotographBySlug(slug as string);
+
+if (!photo) {
+  return Astro.redirect('/');
+}
+
+const allPhotos = getPhotographs();
+const currentIndex = allPhotos.findIndex((p) => p.slug === photo.slug);
+const prevPhoto: Photograph | undefined = currentIndex > 0 ? allPhotos[currentIndex - 1] : undefined;
+const nextPhoto: Photograph | undefined =
+  currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : undefined;
+
+const pageTitle = `${photo.title} · ${photo.metadata.plateNumber} · Atelier Obscura`;
+const pageDescription = photo.editorial.caption;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <main class="monograph-page viewport-padding min-h-screen" id="monograph-top">
+
+    <!-- Return Link -->
+    <nav class="monograph-nav" aria-label="Archive navigation">
+      <a
+        href="/"
+        id="back-to-runway"
+        class="monograph-back-link text-metadata text-muted font-mono tracking-widest uppercase inline-flex items-center gap-2 hover:text-foreground transition-colors duration-300 focus-visible:outline-none"
+      >
+        <span aria-hidden="true">←</span>
+        Exhibition Runway
+      </a>
+    </nav>
+
+    <!-- Monograph Body -->
+    <article class="monograph-article" aria-labelledby="monograph-title">
+
+      <!-- Plate Identity -->
+      <header class="monograph-header">
+        <div class="monograph-plate-id text-metadata text-accent font-mono tracking-widest">
+          {photo.metadata.plateNumber}
+        </div>
+        <h1
+          id="monograph-title"
+          class="monograph-title text-display text-foreground font-serif tracking-tight mt-3"
+        >
+          {photo.title}
+        </h1>
+        <div class="monograph-series text-metadata text-muted font-mono tracking-wider mt-4">
+          {photo.metadata.series}
+          {photo.metadata.year && (
+            <span class="ml-4 text-muted/60">{photo.metadata.year}</span>
+          )}
+        </div>
+      </header>
+
+      <!-- Primary Photograph -->
+      <figure class="monograph-figure m-0" role="img" aria-label={photo.image.alt}>
+        <div
+          class="monograph-photo-frame relative overflow-hidden bg-[#07080a]"
+          style={`aspect-ratio: ${photo.image.width} / ${photo.image.height};`}
+        >
+          <img
+            id="monograph-photograph"
+            src={photo.image.src}
+            alt={photo.image.alt}
+            width={photo.image.width}
+            height={photo.image.height}
+            loading="eager"
+            decoding="async"
+            class="monograph-photo w-full h-full object-contain block"
+          />
+        </div>
+
+        {photo.editorial.caption && (
+          <figcaption class="monograph-figcaption mt-4 text-metadata text-muted font-mono tracking-wide">
+            {photo.editorial.caption}
+          </figcaption>
+        )}
+      </figure>
+
+      <!-- Content: Description + Metadata -->
+      <div class="monograph-content-grid">
+
+        <!-- Editorial -->
+        {photo.editorial.description && (
+          <section class="monograph-editorial" aria-label="Editorial context">
+            <p class="monograph-description text-body text-muted leading-relaxed">
+              {photo.editorial.description}
+            </p>
+            {photo.editorial.curatorialNotes && (
+              <p class="monograph-curatorial text-sm text-muted/70 leading-relaxed border-l border-muted/20 pl-4">
+                {photo.editorial.curatorialNotes}
+              </p>
+            )}
+          </section>
+        )}
+
+        <!-- Metadata -->
+        <aside class="monograph-metadata" aria-label="Technical metadata">
+          <dl class="monograph-dl">
+            {photo.metadata.location && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Location</dt>
+                <dd class="monograph-dd">{photo.metadata.location}</dd>
+              </div>
+            )}
+            {photo.metadata.camera && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Camera</dt>
+                <dd class="monograph-dd">{photo.metadata.camera}</dd>
+              </div>
+            )}
+            {photo.metadata.lens && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Lens</dt>
+                <dd class="monograph-dd">{photo.metadata.lens}</dd>
+              </div>
+            )}
+            {photo.metadata.focalLength && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Focal length</dt>
+                <dd class="monograph-dd monograph-dd-telemetry">{photo.metadata.focalLength}</dd>
+              </div>
+            )}
+            {photo.metadata.aperture && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Aperture</dt>
+                <dd class="monograph-dd monograph-dd-telemetry">{photo.metadata.aperture}</dd>
+              </div>
+            )}
+            {photo.metadata.shutterSpeed && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Shutter</dt>
+                <dd class="monograph-dd monograph-dd-telemetry">{photo.metadata.shutterSpeed}</dd>
+              </div>
+            )}
+            {photo.metadata.iso && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">ISO</dt>
+                <dd class="monograph-dd monograph-dd-telemetry">{photo.metadata.iso}</dd>
+              </div>
+            )}
+            {photo.metadata.medium && (
+              <div class="monograph-dl-row">
+                <dt class="monograph-dt">Medium</dt>
+                <dd class="monograph-dd">{photo.metadata.medium}</dd>
+              </div>
+            )}
+            <div class="monograph-dl-row">
+              <dt class="monograph-dt">Format</dt>
+              <dd class="monograph-dd monograph-dd-telemetry">{photo.image.aspectRatio}</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+
+      <!-- Catalogue Navigation -->
+      {(prevPhoto || nextPhoto) && (
+        <nav
+          class="monograph-catalogue-nav"
+          aria-label="Catalogue navigation"
+        >
+          <div class="monograph-catalogue-nav-grid">
+            {prevPhoto ? (
+              <a
+                href={`/archive/${prevPhoto.slug}`}
+                id="nav-previous"
+                class="monograph-catalogue-link group focus-visible:outline-none"
+                aria-label={`Previous: ${prevPhoto.metadata.plateNumber} ${prevPhoto.title}`}
+              >
+                <span class="monograph-catalogue-direction text-metadata text-muted font-mono tracking-widest uppercase">
+                  Previous
+                </span>
+                <span class="monograph-catalogue-plate text-metadata text-accent font-mono block mt-1">
+                  {prevPhoto.metadata.plateNumber}
+                </span>
+                <span class="monograph-catalogue-name text-body text-foreground font-serif block mt-0.5 group-hover:text-accent transition-colors duration-300">
+                  {prevPhoto.title}
+                </span>
+              </a>
+            ) : (
+              <div aria-hidden="true" />
+            )}
+
+            {nextPhoto ? (
+              <a
+                href={`/archive/${nextPhoto.slug}`}
+                id="nav-next"
+                class="monograph-catalogue-link monograph-catalogue-link-next group focus-visible:outline-none"
+                aria-label={`Next: ${nextPhoto.metadata.plateNumber} ${nextPhoto.title}`}
+              >
+                <span class="monograph-catalogue-direction text-metadata text-muted font-mono tracking-widest uppercase">
+                  Next
+                </span>
+                <span class="monograph-catalogue-plate text-metadata text-accent font-mono block mt-1">
+                  {nextPhoto.metadata.plateNumber}
+                </span>
+                <span class="monograph-catalogue-name text-body text-foreground font-serif block mt-0.5 group-hover:text-accent transition-colors duration-300">
+                  {nextPhoto.title}
+                </span>
+              </a>
+            ) : (
+              <div aria-hidden="true" />
+            )}
+          </div>
+        </nav>
+      )}
+
+      <!-- Colophon -->
+      <footer class="monograph-colophon text-metadata text-muted/50 font-mono tracking-wider">
+        Atelier Obscura · Kroma Archive · {photo.metadata.plateNumber}
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const header = document.querySelector<HTMLElement>('.monograph-header');
+    const photoFrame = document.querySelector<HTMLElement>('.monograph-photo-frame');
+    const figcaption = document.querySelector<HTMLElement>('.monograph-figcaption');
+    const contentGrid = document.querySelector<HTMLElement>('.monograph-content-grid');
+    const catalogueNav = document.querySelector<HTMLElement>('.monograph-catalogue-nav');
+
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+    if (header) {
+      tl.fromTo(header, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.65 });
+    }
+    if (photoFrame) {
+      tl.fromTo(photoFrame, { opacity: 0.08 }, { opacity: 1, duration: 1.0 }, '-=0.3');
+    }
+    if (figcaption) {
+      tl.fromTo(figcaption, { opacity: 0 }, { opacity: 1, duration: 0.55 }, '-=0.4');
+    }
+    if (contentGrid) {
+      tl.fromTo(contentGrid, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.65 }, '-=0.3');
+    }
+    if (catalogueNav) {
+      tl.fromTo(catalogueNav, { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2');
+    }
+  }
+
+  // Keyboard: press Escape to return to runway
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      window.location.href = '/';
+    }
+  });
+</script>
