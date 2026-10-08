@@ -27,7 +27,17 @@ const pageTitle = `${photo.title} · ${photo.metadata.plateNumber} · Atelier Ob
 const pageDescription = photo.editorial.caption;
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  currentPlate={{
+    plateNumber: photo.metadata.plateNumber,
+    title: photo.title,
+    slug: photo.slug,
+    prevSlug: prevPhoto?.slug,
+    nextSlug: nextPhoto?.slug,
+  }}
+>
   <main class="monograph-page viewport-padding min-h-screen" id="monograph-top">
 
     <!-- Return Links -->
@@ -238,17 +248,17 @@ const pageDescription = photo.editorial.caption;
   </main>
 </BaseLayout>
 
-<script>
+<script define:vars={{ prevUrl: prevPhoto ? `/archive/${prevPhoto.slug}` : null, nextUrl: nextPhoto ? `/archive/${nextPhoto.slug}` : null }}>
   import { gsap } from 'gsap';
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReducedMotion) {
-    const header = document.querySelector<HTMLElement>('.monograph-header');
-    const photoFrame = document.querySelector<HTMLElement>('.monograph-photo-frame');
-    const figcaption = document.querySelector<HTMLElement>('.monograph-figcaption');
-    const contentGrid = document.querySelector<HTMLElement>('.monograph-content-grid');
-    const catalogueNav = document.querySelector<HTMLElement>('.monograph-catalogue-nav');
+    const header = document.querySelector('.monograph-header');
+    const photoFrame = document.querySelector('.monograph-photo-frame');
+    const figcaption = document.querySelector('.monograph-figcaption');
+    const contentGrid = document.querySelector('.monograph-content-grid');
+    const catalogueNav = document.querySelector('.monograph-catalogue-nav');
 
     const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
@@ -269,10 +279,16 @@ const pageDescription = photo.editorial.caption;
     }
   }
 
-  // Keyboard: press Escape to return to archive overview
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
+  // Keyboard Navigation: Escape returns to Archive; Arrow keys step through plates
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName)) return;
+
     if (e.key === 'Escape') {
       window.location.href = '/archive';
+    } else if (e.key === 'ArrowLeft' && prevUrl) {
+      window.location.href = prevUrl;
+    } else if (e.key === 'ArrowRight' && nextUrl) {
+      window.location.href = nextUrl;
     }
   });
 </script>

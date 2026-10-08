@@ -710,3 +710,53 @@ html:not(.webgl-active) .plate-photo-frame.is-active {
   }
 }
 
+/* ============================================================
+   EXHIBITION NAVIGATION — Feature 08
+   Unified global curatorial navigation
+   Archive ↔ Exhibition ↔ Photograph ↔ Deep Monograph
+   ENERGY 2 / RHYTHM 3 / MOTION 2
+   ============================================================ */
+
+.global-exhibition-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(13, 14, 16, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(138, 139, 143, 0.15);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-brand:focus-visible,
+.nav-mode-link:focus-visible,
+.nav-quick-arrow:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.nav-mode-link {
+  min-height: 44px; /* Accessible touch target */
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-mode-link.is-active {
+  color: var(--color-foreground);
+}
+
+.nav-active-dot {
+  box-shadow: 0 0 6px rgba(217, 119, 54, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-exhibition-nav,
+  .nav-brand-mark,
+  .nav-mode-link,
+  .nav-quick-arrow {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+

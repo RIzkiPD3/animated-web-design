@@ -2,14 +2,23 @@
 interface Props {
   title?: string;
   description?: string;
+  currentPlate?: {
+    plateNumber: string;
+    title: string;
+    slug: string;
+    prevSlug?: string;
+    nextSlug?: string;
+  };
 }
 
 const {
   title = 'Atelier Obscura',
   description = 'Interactive Photography Archive and Spatial Visual Experience',
+  currentPlate,
 } = Astro.props;
 
 import '../styles/global.css';
+import ExhibitionNav from '../components/ExhibitionNav.astro';
 ---
 
 <!doctype html>
@@ -29,6 +38,7 @@ import '../styles/global.css';
     <title>{title}</title>
   </head>
   <body>
+    <ExhibitionNav currentPlate={currentPlate} />
     <slot />
   </body>
 </html>
